@@ -1,0 +1,57 @@
+[gd_resource type="Theme" load_steps=11 format=3 uid="uid://mdesken2dikp"]
+
+[ext_resource type="FontFile" uid="uid://clp3l4phhf6vn" path="res://fonts/space_mono/regular.ttf" id="1_vjux6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lbw17"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o5uov"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a55s4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bttr5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kd2e6"]
+bg_color = Color(0.117647, 0.152941, 0.180392, 1)
+border_width_right = 1
+border_color = Color(0.341176, 0.372549, 0.811765, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rifno"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3a3nh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n0acx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cwanv"]
+
+[resource]
+default_font = ExtResource("1_vjux6")
+default_font_size = 16
+CodeEdit/colors/caret_color = Color(0.501961, 0.556863, 0.607843, 1)
+CodeEdit/colors/current_line_color = Color(0.282353, 0.329412, 0.376471, 0.294118)
+CodeEdit/colors/font_color = Color(0.823529, 0.854902, 0.886275, 1)
+CodeEdit/colors/line_number_color = Color(0.282353, 0.329412, 0.376471, 1)
+CodeEdit/colors/selection_color = Color(0.282353, 0.329412, 0.376471, 1)
+CodeEdit/colors/word_highlighted_color = Color(0.282353, 0.329412, 0.376471, 0.490196)
+CodeEdit/font_sizes/font_size = 14
+CodeEdit/styles/focus = SubResource("StyleBoxEmpty_lbw17")
+CodeEdit/styles/normal = SubResource("StyleBoxEmpty_o5uov")
+HBoxContainer/constants/separation = 0
+Label/colors/font_color = Color(0.823529, 0.854902, 0.886275, 1)
+Label/font_sizes/font_size = 14
+LineEdit/font_sizes/font_size = 14
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_a55s4")
+LineEdit/styles/normal = SubResource("StyleBoxEmpty_bttr5")
+MarginContainer/constants/margin_bottom = 8
+MarginContainer/constants/margin_left = 8
+MarginContainer/constants/margin_right = 8
+MarginContainer/constants/margin_top = 8
+Panel/styles/panel = SubResource("StyleBoxFlat_kd2e6")
+Tree/colors/font_color = Color(0.501961, 0.556863, 0.607843, 1)
+Tree/colors/font_selected_color = Color(0.823529, 0.854902, 0.886275, 1)
+Tree/colors/guide_color = Color(0.282353, 0.329412, 0.376471, 1)
+Tree/font_sizes/font_size = 14
+Tree/styles/focus = SubResource("StyleBoxEmpty_rifno")
+Tree/styles/panel = SubResource("StyleBoxEmpty_3a3nh")
+Tree/styles/selected = SubResource("StyleBoxEmpty_n0acx")
+Tree/styles/selected_focus = SubResource("StyleBoxEmpty_cwanv")
+VBoxContainer/constants/separation = 0
