@@ -1,2 +1,1 @@
-""s
-# IMPORTANT
+This is a document!

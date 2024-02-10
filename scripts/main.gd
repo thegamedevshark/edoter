@@ -19,11 +19,7 @@ extends Control
 @onready var body = %Body
 
 
-var filepath = ""
-var directory = ""
-var filename = ""
-
-
+var path = ""
 var outfit: Dictionary
 var data = {
 	"outfit": "gruvbox"
@@ -32,44 +28,41 @@ var data = {
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# Set the focus to the code edit so it immediately editable after
+	# opening the program.
 	code_edit.grab_focus()
-	print(data["outfit"])
-	outfit = load_json("res://data/outfits/" + data["outfit"] + ".json")
+
+	# Load the outfit stored in the data.
+	outfit = Utils.load_json("res://data/outfits/" + data["outfit"] + ".json")
+	
+	# Apply the outfit to all the components.
 	dressup()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	# Handle exiting the program.
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
 	
-	elif Input.is_action_just_pressed("new"):
-		explorer.visible = false
-		code_edit.grab_focus()
-		directory = ""
-		filename = ""
-		filename_label.text = "untitled"
-		filepath = ""
-		code_edit.text = "\n"
+	# Handle creating a new file.
+	elif Input.is_action_just_pressed("new_file"):
+		new_file()
 	
+	# Handle opening a directory.
 	elif Input.is_action_just_pressed("open_dir"):
 		open_dir_dialog.popup_centered()
 
+	# Handle opening a file.
 	elif Input.is_action_just_pressed("open_file"):
 		open_file_dialog.popup_centered()
 	
-	elif Input.is_action_just_pressed("save"):
-		if filename == "":
-			# In this case it is a new file and should be saved as.
-			save_file_dialog.popup_centered()
-		else:
-			# In this case the file being edited already has a path.
-			# We can save overwrite the file at the path to save.
-			var f = FileAccess.open(filepath, FileAccess.WRITE)
-			f.store_string(code_edit.text)
-			f.close()
+	# Handle saving a file.
+	elif Input.is_action_just_pressed("save_file"):
+		save_file()
 	
-	elif Input.is_action_just_pressed("explorer"):
+	# Handle toggling the file explorer.
+	elif Input.is_action_just_pressed("toggle_explorer"):
 		if explorer.get_root() != null:
 			explorer.visible = !explorer.visible
 		else:
@@ -78,15 +71,8 @@ func _process(delta):
 		if explorer.visible:
 			explorer.grab_focus()
 			var selected = explorer.get_selected()
-			print(selected)
-
-
-# Take a filepath for a JSON file and return its contents as a dictionary.
-func load_json(path: String) -> Dictionary:
-	var f = FileAccess.open(path, FileAccess.READ)
-	var result = f.get_as_text()
-	f.close()
-	return JSON.parse_string(result)
+		else:
+			code_edit.grab_focus()
 
 
 # Take an outfit and trigger all the neccessary theme changes.
@@ -128,11 +114,33 @@ func dressup(extension: String = ""):
 	code_edit.add_theme_color_override("caret_color", outfit["b"])
 	code_edit.add_theme_color_override("line_number_color", outfit["c"])
 	code_edit.highlight(extension, outfit)
+	
+	# Change the theme settings for the explorer.
+	explorer.add_theme_color_override("font_color", outfit["b"])
+	explorer.add_theme_color_override("font_selected_color", outfit["a"])
+	explorer.add_theme_color_override("guide_color", outfit["c"])
+
+
+func new_file():
+	explorer.visible = false
+	explorer.clear()
+	code_edit.grab_focus()
+	path = ""
+	filename_label.text = "untitled"
+	code_edit.text = "\n"
+
+
+func save_file():
+	if path == "":
+		# In this case it is a new file and should be saved as.
+		save_file_dialog.popup_centered()
+	else:
+		# In this case the file being edited already has a path.
+		# We can save overwrite the file at the path to save.
+		Utils.write_file(path, code_edit.text)
 
 
 func _on_open_dir_dialog_dir_selected(dir):
-	directory = dir
-	
 	# Remove all items in the explorer.
 	explorer.clear()
 	
@@ -145,63 +153,51 @@ func _on_open_dir_dialog_dir_selected(dir):
 	root.set_text(0, dir)
 	
 	# Get all the files in the directory and add them to the explorer.
-	var files = DirAccess.get_files_at(dir)
+	var filenames = DirAccess.get_files_at(dir)
 	
-	if len(files) > 0:
+	if len(filenames) > 0:
 		# Add all the files to the explorer.
-		for f in files:
+		for filename in filenames:
+			var path = dir + "\\" + filename.get_file()
+			
+			# Add an item to the root of the explorer.
 			var item = explorer.get_root().create_child()
-			item.set_text(0, f.get_file())
+			
+			# Set the text of the item to the name of the file.
+			item.set_text(0, filename.get_file())
+			
+			# Set the metadata of the item to the file path.
+			item.set_metadata(0, path)
 		
 		# Focus the first file in the explorer.
 		var first = root.get_child(0)
 		explorer.set_selected(first, 0)
 		
-		# Open the first file in the explorer.
-		var f = FileAccess.open(dir + "\\" + first.get_text(0), FileAccess.READ)
-		filepath = f.get_path()
-		code_edit.set_text(f.get_as_text())
-		f.close()
-		filename = first.get_text(0)
-		filename_label.set_text(filename)
+		path = dir + "\\" + first.get_text(0)
+		code_edit.text = Utils.read_file(path)
+		filename_label.text = Utils.get_file_name(path)
 	else:
-		# Make a new file (untitled).
-		# Close the explorer.
-		# User can save this.
-		
-		# Hide the explorer and set focus to the code edit.
 		explorer.visible = false
 		code_edit.grab_focus()
-		
-		filename = ""
+		path = ""
 
 
 func _on_open_file_dialog_file_selected(path):
-	directory = ""
-	filepath = path
+	self.path = path
 	
 	explorer.visible = false
 	explorer.clear()
 	
-	var f = FileAccess.open(path, FileAccess.READ)
-	filename = f.get_path().get_file()
-	code_edit.text = f.get_as_text()
-	var extension = f.get_path().get_extension()
-	f.close()
-	
+	code_edit.text = Utils.read_file(path)
+	filename_label.text = Utils.get_file_name(path)
+	var extension = Utils.get_file_extension(path)
 	code_edit.highlight(extension, outfit)
-	filename_label.text = filename
 
 
 func _on_save_file_dialog_file_selected(path):
-	# Save the file.
-	var f = FileAccess.open(path, FileAccess.WRITE)
-	f.store_string(code_edit.get_text())
-	filename = f.get_path().get_file()
-	f.close()
-	
-	filepath = path
-	filename_label.text = filename
+	Utils.write_file(path, code_edit.text)
+	filename_label.text = Utils.get_file_name(path)
+	self.path = path
 
 
 func _on_explorer_item_selected():
@@ -209,26 +205,12 @@ func _on_explorer_item_selected():
 	var item = explorer.get_selected()
 	
 	# Get the full path to the selected item.
-	var path = directory + "\\" + item.get_text(0)
-	
-	# Open the file at the path.
-	var f = FileAccess.open(path, FileAccess.READ)
-	
-	# Set the code edit text to the contents of the file.
-	code_edit.text = f.get_as_text()
-	
-	# Get the file extension.
-	var extension = f.get_path().get_extension()
-	
-	# Close the file.
-	f.close()
+	path = item.get_metadata(0)
 
-	# Setup syntax highlighting on the code edit for the filetype.
+	code_edit.text = Utils.read_file(path)
+	filename_label.text = Utils.get_file_name(path)
+	var extension = Utils.get_file_extension(path)
 	code_edit.highlight(extension, outfit)
-	
-	filepath = path
-	filename = item.get_text(0)
-	filename_label.text = filename
 
 
 func _on_explorer_item_activated():
