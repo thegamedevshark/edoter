@@ -12,6 +12,8 @@ func load_json(path: String) -> Dictionary:
 # Take a file path and return the file extension.
 func get_file_extension(path: String) -> String:
 	var f = FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		return ""
 	var result = f.get_path().get_extension()
 	f.close()
 	return result

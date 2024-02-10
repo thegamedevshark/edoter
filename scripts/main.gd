@@ -24,6 +24,8 @@ var outfit: Dictionary
 var data = {
 	"outfit": "gruvbox"
 }
+var outfit_index = 0
+var outfits: Array = []
 
 
 # Called when the node enters the scene tree for the first time.
@@ -36,7 +38,16 @@ func _ready():
 	outfit = Utils.load_json("res://data/outfits/" + data["outfit"] + ".json")
 	
 	# Apply the outfit to all the components.
-	dressup()
+	dressup(outfit)
+	
+	var filenames = DirAccess.get_files_at("res://data/outfits")
+	var index = 0
+	for filename in filenames:
+		var basename = filename.get_basename() # E.g. 'gruvbox'.
+		outfits.append(basename)
+		if basename == data["outfit"]:
+			outfit_index = index
+		index += 1
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -73,11 +84,23 @@ func _process(delta):
 			var selected = explorer.get_selected()
 		else:
 			code_edit.grab_focus()
+	
+	# Handle changing outfit.
+	elif Input.is_action_just_pressed("change_outfit"):
+		outfit_index += 1
+		if outfit_index >= len(outfits):
+			outfit_index = 0
+		var outfit_path = "res://data/outfits/" + outfits[outfit_index] + ".json"
+		var json = Utils.load_json(outfit_path)
+		var extension = Utils.get_file_extension(path)
+		dressup(json, extension)
 
 
 # Take an outfit and trigger all the neccessary theme changes.
 # The extension is the file extension and is used for setting up the syntax highlighting.
-func dressup(extension: String = ""):
+func dressup(outfit: Dictionary, extension: String = ""):
+	self.outfit = outfit
+	
 	# Change the titlebar theme settings.
 	titlebar.get_theme_stylebox("panel").bg_color = Color.html(outfit["titlebar"])
 	titlebar.get_theme_stylebox("panel").border_color = Color.html(outfit["outline"])
