@@ -21,7 +21,7 @@ extends Control
 var path = ""
 var outfit: Dictionary
 var data = {
-	"outfit": "nord"
+	"outfit": "edoter"
 }
 var outfit_index = 0
 var outfits: Array = []
@@ -29,6 +29,10 @@ var outfits: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if FileAccess.file_exists("user://data.json"):
+		var json = Utils.load_json("user://data.json")
+		data["outfit"] = json["outfit"]
+	
 	# Set the focus to the code edit so it immediately editable after
 	# opening the program.
 	code_edit.grab_focus()
@@ -89,10 +93,14 @@ func _process(delta):
 		outfit_index += 1
 		if outfit_index >= len(outfits):
 			outfit_index = 0
-		var outfit_path = "res://data/outfits/" + outfits[outfit_index] + ".json"
+		var outfit_name = outfits[outfit_index]
+		var outfit_path = "res://data/outfits/" + outfit_name + ".json"
 		var json = Utils.load_json(outfit_path)
 		var extension = Utils.get_file_extension(path)
 		dressup(json, extension)
+		
+		data["outfit"] = outfit_name
+		Utils.write_file("user://data.json", JSON.stringify(data, "\t"))
 
 
 # Take an outfit and trigger all the neccessary theme changes.
