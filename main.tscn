@@ -51,6 +51,7 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="Titlebar" type="Panel" parent="VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cjgt0")
@@ -70,7 +71,8 @@ theme_override_constants/margin_right = 0
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Application" type="Label" parent="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer"]
+[node name="EdoterLabel" type="Label" parent="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "edoter"
 
@@ -79,6 +81,7 @@ layout_mode = 2
 theme_override_constants/margin_top = 10
 
 [node name="Dot" type="Label" parent="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.282353, 0.329412, 0.376471, 1)
@@ -97,7 +100,8 @@ text = "untitled"
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Minimize" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+[node name="MinimizeButton" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 theme = ExtResource("3_hr1n6")
@@ -105,7 +109,8 @@ text = "1"
 flat = true
 script = ExtResource("2_nt771")
 
-[node name="Maximize" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+[node name="MaximizeButton" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 theme = ExtResource("3_hr1n6")
@@ -113,7 +118,8 @@ text = "2"
 flat = true
 script = ExtResource("2_ifb6n")
 
-[node name="Close" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+[node name="CloseButton" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 theme = ExtResource("3_hr1n6")
@@ -121,12 +127,13 @@ text = "3"
 flat = true
 script = ExtResource("2_552oc")
 
-[node name="Content" type="Panel" parent="VBoxContainer"]
+[node name="Body" type="Panel" parent="VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_co52s")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Content"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -138,11 +145,11 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Content/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Body/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Explorer" type="Tree" parent="VBoxContainer/Content/MarginContainer/HBoxContainer"]
+[node name="Explorer" type="Tree" parent="VBoxContainer/Body/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -150,12 +157,12 @@ size_flags_horizontal = 3
 hide_root = true
 script = ExtResource("8_eet5u")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Content/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 16
 
-[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer/Content/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer/Body/MarginContainer/HBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -203,12 +210,12 @@ access = 2
 use_native_dialog = true
 
 [connection signal="gui_input" from="VBoxContainer/Titlebar" to="VBoxContainer/Titlebar" method="_on_gui_input"]
-[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/Minimize" to="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/Minimize" method="_on_pressed"]
-[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/Maximize" to="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/Maximize" method="_on_pressed"]
-[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/Close" to="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer/MarginContainer/Dot" method="_on_close_pressed"]
-[connection signal="item_activated" from="VBoxContainer/Content/MarginContainer/HBoxContainer/Explorer" to="." method="_on_explorer_item_activated"]
-[connection signal="item_selected" from="VBoxContainer/Content/MarginContainer/HBoxContainer/Explorer" to="." method="_on_explorer_item_selected"]
-[connection signal="focus_entered" from="VBoxContainer/Content/MarginContainer/HBoxContainer/MarginContainer/CodeEdit" to="." method="_on_code_edit_focus_entered"]
+[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/MinimizeButton" to="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/MinimizeButton" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/MaximizeButton" to="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/MaximizeButton" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/CloseButton" to="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer/MarginContainer/Dot" method="_on_close_pressed"]
+[connection signal="item_activated" from="VBoxContainer/Body/MarginContainer/HBoxContainer/Explorer" to="." method="_on_explorer_item_activated"]
+[connection signal="item_selected" from="VBoxContainer/Body/MarginContainer/HBoxContainer/Explorer" to="." method="_on_explorer_item_selected"]
+[connection signal="focus_entered" from="VBoxContainer/Body/MarginContainer/HBoxContainer/MarginContainer/CodeEdit" to="." method="_on_code_edit_focus_entered"]
 [connection signal="dir_selected" from="OpenDirDialog" to="." method="_on_open_dir_dialog_dir_selected"]
 [connection signal="file_selected" from="OpenFileDialog" to="." method="_on_open_file_dialog_file_selected"]
 [connection signal="file_selected" from="SaveFileDialog" to="." method="_on_save_file_dialog_file_selected"]

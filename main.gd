@@ -1,19 +1,42 @@
 extends Control
 
+
 @onready var open_dir_dialog = %OpenDirDialog
 @onready var open_file_dialog = %OpenFileDialog
 @onready var save_file_dialog = %SaveFileDialog
 @onready var explorer = %Explorer
 @onready var code_edit = %CodeEdit
+
+@onready var edoter_label = %EdoterLabel
 @onready var filename_label = %FilenameLabel
+@onready var dot_label = %Dot
+
+@onready var minimize_button = %MinimizeButton
+@onready var maximize_button = %MaximizeButton
+@onready var close_button = %CloseButton
+
+@onready var titlebar = %Titlebar
+@onready var body = %Body
+
 
 var filepath = ""
 var directory = ""
 var filename = ""
 
+
+var outfit: Dictionary
+var data = {
+	"outfit": "gruvbox"
+}
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	code_edit.grab_focus()
+	print(data["outfit"])
+	outfit = load_json("res://data/outfits/" + data["outfit"] + ".json")
+	dressup()
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -56,6 +79,56 @@ func _process(delta):
 			explorer.grab_focus()
 			var selected = explorer.get_selected()
 			print(selected)
+
+
+# Take a filepath for a JSON file and return its contents as a dictionary.
+func load_json(path: String) -> Dictionary:
+	var f = FileAccess.open(path, FileAccess.READ)
+	var result = f.get_as_text()
+	f.close()
+	return JSON.parse_string(result)
+
+
+# Take an outfit and trigger all the neccessary theme changes.
+# The extension is the file extension and is used for setting up the syntax highlighting.
+func dressup(extension: String = ""):
+	# Change the titlebar theme settings.
+	titlebar.get_theme_stylebox("panel").bg_color = Color.html(outfit["titlebar"])
+	titlebar.get_theme_stylebox("panel").border_color = Color.html(outfit["outline"])
+	
+	# Change the body theme settings.
+	body.get_theme_stylebox("panel").bg_color = Color.html(outfit["body"])
+	body.get_theme_stylebox("panel").border_color = Color.html(outfit["outline"])
+	
+	# Change the A, B, and C theme settings for fonts.
+	edoter_label.add_theme_color_override("font_color", outfit["a"])
+	filename_label.add_theme_color_override("font_color", outfit["b"])
+	dot_label.add_theme_color_override("font_color", outfit["c"])
+	
+	minimize_button.add_theme_color_override("font_color", outfit["b"])
+	minimize_button.add_theme_color_override("font_hover_color", outfit["a"])
+	minimize_button.add_theme_color_override("font_hover_pressed_color", outfit["b"])
+	minimize_button.add_theme_color_override("font_pressed_color", outfit["b"])
+	minimize_button.add_theme_color_override("font_focus_color", outfit["b"])
+	
+	maximize_button.add_theme_color_override("font_color", outfit["b"])
+	maximize_button.add_theme_color_override("font_hover_color", outfit["a"])
+	maximize_button.add_theme_color_override("font_hover_pressed_color", outfit["b"])
+	maximize_button.add_theme_color_override("font_pressed_color", outfit["b"])
+	maximize_button.add_theme_color_override("font_focus_color", outfit["b"])
+	
+	close_button.add_theme_color_override("font_color", outfit["b"])
+	close_button.add_theme_color_override("font_hover_color", outfit["a"])
+	close_button.add_theme_color_override("font_hover_pressed_color", outfit["b"])
+	close_button.add_theme_color_override("font_pressed_color", outfit["b"])
+	close_button.add_theme_color_override("font_focus_color", outfit["b"])
+	
+	# Change the syntax highlighting settings.
+	code_edit.add_theme_color_override("font_color", outfit["a"])
+	code_edit.add_theme_color_override("caret_color", outfit["b"])
+	code_edit.add_theme_color_override("line_number_color", outfit["c"])
+	code_edit.highlight(extension, outfit)
+
 
 func _on_open_dir_dialog_dir_selected(dir):
 	directory = dir
@@ -102,6 +175,7 @@ func _on_open_dir_dialog_dir_selected(dir):
 		
 		filename = ""
 
+
 func _on_open_file_dialog_file_selected(path):
 	directory = ""
 	filepath = path
@@ -112,9 +186,12 @@ func _on_open_file_dialog_file_selected(path):
 	var f = FileAccess.open(path, FileAccess.READ)
 	filename = f.get_path().get_file()
 	code_edit.text = f.get_as_text()
+	var extension = f.get_path().get_extension()
 	f.close()
 	
+	code_edit.highlight(extension, outfit)
 	filename_label.text = filename
+
 
 func _on_save_file_dialog_file_selected(path):
 	# Save the file.
@@ -126,46 +203,38 @@ func _on_save_file_dialog_file_selected(path):
 	filepath = path
 	filename_label.text = filename
 
+
 func _on_explorer_item_selected():
+	# Get the selected item from the explorer.
 	var item = explorer.get_selected()
+	
+	# Get the full path to the selected item.
 	var path = directory + "\\" + item.get_text(0)
+	
+	# Open the file at the path.
 	var f = FileAccess.open(path, FileAccess.READ)
+	
+	# Set the code edit text to the contents of the file.
 	code_edit.text = f.get_as_text()
 	
+	# Get the file extension.
 	var extension = f.get_path().get_extension()
-	var languages = DirAccess.get_files_at("res://data/languages")
-	code_edit.reset()
-	for lang in languages:
-		if extension == lang.get_basename():
-			var flang = FileAccess.open("res://data/languages/" + lang, FileAccess.READ)
-			var json = JSON.parse_string(flang.get_as_text())
-			
-			var highlighter = code_edit.syntax_highlighter
-			highlighter.set_number_color(Color.html(json["number"]))
-			highlighter.set_symbol_color(Color.html(json["symbol"]))
-			highlighter.set_function_color(Color.html(json["function"]))
-			highlighter.set_member_variable_color(Color(0.50196081399918, 0.55686277151108, 0.60784316062927))
-			
-			for keyword in json["keywords"]:
-				highlighter.add_keyword_color(keyword, Color.html(json["keywords"][keyword]))
-			
-			for region in json["regions"]:
-				highlighter.add_color_region(region[0], region[1], Color.html(region[2]))
-			
-			flang.close()
-			break
 	
-	
-	
+	# Close the file.
 	f.close()
 
+	# Setup syntax highlighting on the code edit for the filetype.
+	code_edit.highlight(extension, outfit)
+	
 	filepath = path
 	filename = item.get_text(0)
 	filename_label.text = filename
 
+
 func _on_explorer_item_activated():
 	explorer.visible = false
 	code_edit.grab_focus()
+
 
 func _on_code_edit_focus_entered():
 	explorer.visible = false

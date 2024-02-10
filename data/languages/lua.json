@@ -1,36 +1,31 @@
 {
-	"number": "d2dae2",
-	"symbol": "d2dae2",
-	"function": "757ded",
-	"member": "808e9b",
-	
-	"keywords": {
-		"and"     : "ef5777",
-		"break"   : "ef5777",
-		"do"      : "ef5777",
-		"else"    : "ef5777",
-		"elseif"  : "ef5777",
-		"end"     : "ef5777",
-		"false"   : "ef5777",
-		"for"     : "ef5777",
-		"function": "ef5777",
-		"if"      : "ef5777",
-		"in"      : "ef5777",
-		"local"   : "ef5777",
-		"nil"     : "ef5777",
-		"not"     : "ef5777",
-		"or"      : "ef5777",
-		"repeat"  : "ef5777",
-		"return"  : "ef5777",
-		"then"    : "ef5777",
-		"true"    : "ef5777",
-		"until"   : "ef5777",
-		"while"   : "ef5777"
-	},
+	"keywords": [
+		"and",
+		"break",
+		"do",
+		"else",
+		"elseif",
+		"end",
+		"false",
+		"for",
+		"function",
+		"if",
+		"in",
+		"local",
+		"nil",
+		"not",
+		"or",
+		"repeat",
+		"return",
+		"then",
+		"true",
+		"until",
+		"while"
+	],
 	
 	"regions": [
-		["\"", "\"", "fff195"],
-		["'", "'", "fff195"],
-		["--", "", "808e9b"]
+		["string", "\"", "\""],
+		["string", "'", "'"],
+		["comment", "--", ""]
 	]
 }
