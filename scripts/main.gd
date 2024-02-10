@@ -18,11 +18,10 @@ extends Control
 @onready var titlebar = %Titlebar
 @onready var body = %Body
 
-
 var path = ""
 var outfit: Dictionary
 var data = {
-	"outfit": "gruvbox"
+	"outfit": "nord"
 }
 var outfit_index = 0
 var outfits: Array = []
