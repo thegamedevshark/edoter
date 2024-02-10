@@ -131,6 +131,32 @@ func _on_explorer_item_selected():
 	var path = directory + "\\" + item.get_text(0)
 	var f = FileAccess.open(path, FileAccess.READ)
 	code_edit.text = f.get_as_text()
+	
+	var extension = f.get_path().get_extension()
+	var languages = DirAccess.get_files_at("res://data/languages")
+	code_edit.syntax_highlighter = CodeHighlighter.new()
+	for lang in languages:
+		if extension == lang.get_basename():
+			var flang = FileAccess.open("res://data/languages/" + lang, FileAccess.READ)
+			var json = JSON.parse_string(flang.get_as_text())
+			
+			var highlighter = code_edit.syntax_highlighter
+			highlighter.set_number_color(Color.html(json["number"]))
+			highlighter.set_symbol_color(Color.html(json["symbol"]))
+			highlighter.set_function_color(Color.html(json["function"]))
+			highlighter.set_member_variable_color(Color(0.50196081399918, 0.55686277151108, 0.60784316062927))
+			
+			for keyword in json["keywords"]:
+				highlighter.add_keyword_color(keyword, Color.html(json["keywords"][keyword]))
+			
+			for region in json["regions"]:
+				highlighter.add_color_region(region[0], region[1], Color.html(region[2]))
+			
+			flang.close()
+			break
+	
+	
+	
 	f.close()
 
 	filepath = path
