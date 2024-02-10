@@ -134,7 +134,7 @@ func _on_explorer_item_selected():
 	
 	var extension = f.get_path().get_extension()
 	var languages = DirAccess.get_files_at("res://data/languages")
-	code_edit.syntax_highlighter = CodeHighlighter.new()
+	code_edit.reset()
 	for lang in languages:
 		if extension == lang.get_basename():
 			var flang = FileAccess.open("res://data/languages/" + lang, FileAccess.READ)
