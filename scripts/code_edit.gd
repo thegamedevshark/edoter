@@ -7,13 +7,6 @@ func _ready():
 	reset()
 
 
-func _process(delta):
-	if Input.is_action_just_pressed("ctrl"):
-		editable = false
-	elif not Input.is_action_pressed("ctrl"):
-		editable = true
-
-
 func reset():
 	syntax_highlighter = CodeHighlighter.new()
 	var highlighter = syntax_highlighter
@@ -21,6 +14,7 @@ func reset():
 	highlighter.set_symbol_color(Color(0.82352942228317, 0.85490196943283, 0.88627451658249))
 	highlighter.set_function_color(Color(0.82352942228317, 0.85490196943283, 0.88627451658249))
 	highlighter.set_member_variable_color(Color(0.82352942228317, 0.85490196943283, 0.88627451658249))
+
 
 func highlight(extension: String, outfit: Dictionary):
 	# Reset the code edit
@@ -69,6 +63,7 @@ func highlight(extension: String, outfit: Dictionary):
 	syntax_highlighter.set_symbol_color(outfit["a"])
 	syntax_highlighter.set_function_color(outfit["a"])
 	syntax_highlighter.set_member_variable_color(outfit["a"])
+
 
 func dressup(outfit: Dictionary):
 	pass
