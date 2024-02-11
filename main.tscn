@@ -170,6 +170,7 @@ text = "
 "
 context_menu_enabled = false
 caret_type = 1
+caret_draw_when_editable_disabled = true
 syntax_highlighter = SubResource("CodeHighlighter_ocduv")
 highlight_all_occurrences = true
 highlight_current_line = true

@@ -141,6 +141,7 @@ func dressup(outfit: Dictionary, extension: String = ""):
 	
 	# Change the syntax highlighting settings.
 	code_edit.add_theme_color_override("font_color", outfit["a"])
+	code_edit.add_theme_color_override("font_readonly_color", outfit["a"])
 	code_edit.add_theme_color_override("caret_color", outfit["b"])
 	code_edit.add_theme_color_override("line_number_color", outfit["c"])
 	code_edit.highlight(extension, outfit)

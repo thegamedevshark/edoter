@@ -1,10 +1,12 @@
-[gd_resource type="Theme" load_steps=11 format=3 uid="uid://mdesken2dikp"]
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://mdesken2dikp"]
 
 [ext_resource type="FontFile" uid="uid://clp3l4phhf6vn" path="res://fonts/space_mono/regular.ttf" id="1_vjux6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lbw17"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o5uov"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a7rqn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a55s4"]
 
@@ -29,12 +31,14 @@ default_font_size = 16
 CodeEdit/colors/caret_color = Color(0.501961, 0.556863, 0.607843, 1)
 CodeEdit/colors/current_line_color = Color(0.282353, 0.329412, 0.376471, 0.294118)
 CodeEdit/colors/font_color = Color(0.823529, 0.854902, 0.886275, 1)
+CodeEdit/colors/font_readonly_color = Color(0.823529, 0.854902, 0.886275, 1)
 CodeEdit/colors/line_number_color = Color(0.282353, 0.329412, 0.376471, 1)
 CodeEdit/colors/selection_color = Color(0.282353, 0.329412, 0.376471, 1)
 CodeEdit/colors/word_highlighted_color = Color(0.282353, 0.329412, 0.376471, 0.490196)
 CodeEdit/font_sizes/font_size = 14
 CodeEdit/styles/focus = SubResource("StyleBoxEmpty_lbw17")
 CodeEdit/styles/normal = SubResource("StyleBoxEmpty_o5uov")
+CodeEdit/styles/read_only = SubResource("StyleBoxEmpty_a7rqn")
 HBoxContainer/constants/separation = 0
 Label/colors/font_color = Color(0.823529, 0.854902, 0.886275, 1)
 Label/font_sizes/font_size = 14

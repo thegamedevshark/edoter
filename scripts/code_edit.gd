@@ -6,6 +6,14 @@ var previous_text: String = ""
 func _ready():
 	reset()
 
+
+func _process(delta):
+	if Input.is_action_just_pressed("ctrl"):
+		editable = false
+	elif not Input.is_action_pressed("ctrl"):
+		editable = true
+
+
 func reset():
 	syntax_highlighter = CodeHighlighter.new()
 	var highlighter = syntax_highlighter
