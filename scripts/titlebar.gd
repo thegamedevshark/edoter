@@ -14,5 +14,13 @@ func _process(delta):
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.get_button_index() == 1:
-			following = !following
-			dragging_start_position = get_local_mouse_position()
+			if event.double_click:
+				Utils.window_toggle_maximized()
+				if Utils.is_window_windowed():
+					following = false
+			
+			if Utils.is_window_maximized():
+				following = false
+			elif Utils.is_window_windowed():
+				following = !following
+				dragging_start_position = get_local_mouse_position()
