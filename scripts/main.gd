@@ -146,6 +146,20 @@ func dressup(outfit: Dictionary, extension: String = ""):
 	code_edit.add_theme_color_override("line_number_color", outfit["c"])
 	code_edit.highlight(extension, outfit)
 	
+	# Change the theme settings for the vertical scroll bar
+	var v_scroll_bar = code_edit.get_v_scroll_bar()
+	v_scroll_bar.get_theme_stylebox("grabber").bg_color = outfit["c"]
+	v_scroll_bar.get_theme_stylebox("grabber_highlight").bg_color = outfit["b"]
+	v_scroll_bar.get_theme_stylebox("grabber_pressed").bg_color = outfit["c"]
+	v_scroll_bar.get_theme_stylebox("scroll").border_color = outfit["c"]
+	
+	# Change the theme settings for the horizontal scroll bar
+	var h_scroll_bar = code_edit.get_h_scroll_bar()
+	h_scroll_bar.get_theme_stylebox("grabber").bg_color = outfit["c"]
+	h_scroll_bar.get_theme_stylebox("grabber_highlight").bg_color = outfit["b"]
+	h_scroll_bar.get_theme_stylebox("grabber_pressed").bg_color = outfit["c"]
+	h_scroll_bar.get_theme_stylebox("scroll").border_color = outfit["c"]
+	
 	# Change the theme settings for the explorer.
 	explorer.add_theme_color_override("font_color", outfit["b"])
 	explorer.add_theme_color_override("font_selected_color", outfit["a"])
