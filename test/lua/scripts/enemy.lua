@@ -1,2 +1,0 @@
-local enemy = {}
-return enemy
