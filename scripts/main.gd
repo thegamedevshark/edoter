@@ -209,7 +209,7 @@ func fill_explorer(item: TreeItem) -> void:
 		for path in directories:
 			var new_item = item.create_child()
 			var filename = Utils.get_file_name(path)
-			new_item.set_text(0, filename)
+			new_item.set_text(0, "\uf4d4 \u2009" + filename) # Open folder icon
 			new_item.set_metadata(0, path)
 			fill_explorer(new_item)
 	
@@ -300,6 +300,11 @@ func _on_explorer_item_activated():
 		code_edit.grab_focus()
 	else:
 		item.collapsed = !item.collapsed
+		var filename = Utils.get_file_name(item.get_metadata(0))
+		if item.collapsed:
+			item.set_text(0, "\uf4d3 \u2009" + filename) # Closed folder icon.
+		else:
+			item.set_text(0, "\uf4d4 \u2009" + filename) # Open folder icon.
 
 
 func _on_code_edit_focus_entered():

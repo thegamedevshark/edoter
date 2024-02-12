@@ -140,10 +140,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Body/MarginContainer"]
 layout_mode = 2
@@ -154,15 +154,12 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+allow_search = false
+hide_folding = true
 hide_root = true
 script = ExtResource("8_eet5u")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 16
-
-[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer/Body/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer/Body/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -216,7 +213,7 @@ use_native_dialog = true
 [connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/CloseButton" to="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer/MarginContainer/Dot" method="_on_close_pressed"]
 [connection signal="item_activated" from="VBoxContainer/Body/MarginContainer/HBoxContainer/Explorer" to="." method="_on_explorer_item_activated"]
 [connection signal="item_selected" from="VBoxContainer/Body/MarginContainer/HBoxContainer/Explorer" to="." method="_on_explorer_item_selected"]
-[connection signal="focus_entered" from="VBoxContainer/Body/MarginContainer/HBoxContainer/MarginContainer/CodeEdit" to="." method="_on_code_edit_focus_entered"]
+[connection signal="focus_entered" from="VBoxContainer/Body/MarginContainer/HBoxContainer/CodeEdit" to="." method="_on_code_edit_focus_entered"]
 [connection signal="dir_selected" from="OpenDirDialog" to="." method="_on_open_dir_dialog_dir_selected"]
 [connection signal="file_selected" from="OpenFileDialog" to="." method="_on_open_file_dialog_file_selected"]
 [connection signal="file_selected" from="SaveFileDialog" to="." method="_on_save_file_dialog_file_selected"]
