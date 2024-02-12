@@ -1,33 +1,33 @@
 extends Control
 
 
-@onready var open_dir_dialog = %OpenDirDialog
-@onready var open_file_dialog = %OpenFileDialog
-@onready var save_file_dialog = %SaveFileDialog
-@onready var explorer = %Explorer
-@onready var code_edit = %CodeEdit
+@onready var open_dir_dialog: FileDialog = %OpenDirDialog
+@onready var open_file_dialog: FileDialog = %OpenFileDialog
+@onready var save_file_dialog: FileDialog = %SaveFileDialog
+@onready var explorer: Tree = %Explorer
+@onready var code_edit: CodeEdit = %CodeEdit
 
-@onready var edoter_label = %EdoterLabel
-@onready var filename_label = %FilenameLabel
-@onready var dot_label = %Dot
+@onready var edoter_label: Label = %EdoterLabel
+@onready var filename_label: Label = %FilenameLabel
+@onready var dot_label: Label = %Dot
 
-@onready var minimize_button = %MinimizeButton
-@onready var maximize_button = %MaximizeButton
-@onready var close_button = %CloseButton
+@onready var minimize_button: Button = %MinimizeButton
+@onready var maximize_button: Button = %MaximizeButton
+@onready var close_button: Button = %CloseButton
 
-@onready var titlebar = %Titlebar
-@onready var body = %Body
+@onready var titlebar: Panel = %Titlebar
+@onready var body: Panel = %Body
 
 
-var path = ""
-var top = ""
+var path: String = ""
+var top: String = ""
 var last_selected_explorer_file_item: TreeItem = null
 var outfit: Dictionary
-var data = {
+var data: Dictionary = {
 	"outfit": "edoter"
 }
-var outfit_index = 0
-var outfits: Array = []
+var outfit_index: int = 0
+var outfits: Array[String] = []
 
 
 # Called when the node enters the scene tree for the firs6t time.
