@@ -20,6 +20,7 @@ extends Control
 
 
 var path = ""
+var top = ""
 var last_selected_explorer_file_item: TreeItem = null
 var outfit: Dictionary
 var data = {
@@ -86,10 +87,17 @@ func _process(delta):
 		
 		if explorer.visible:
 			explorer.grab_focus()
-			explorer.set_selected(last_selected_explorer_file_item,0)
-			var selected = explorer.get_selected()
+			if last_selected_explorer_file_item != null:
+				explorer.set_selected(last_selected_explorer_file_item, 0)
 		else:
 			code_edit.grab_focus()
+	
+	# Handle launching the project.
+	elif Input.is_action_just_pressed("launch"):
+		if FileAccess.file_exists(top + "/.edoter/launch.bat"):
+			var output = []
+			#var result = OS.execute(top + "/.edoter/launch.bat", [], output, true, true)
+			OS.create_process(top + "/.edoter/launch.bat", [], true)
 	
 	# Handle changing outfit.
 	elif Input.is_action_just_pressed("change_outfit"):
@@ -214,8 +222,14 @@ func fill_explorer(item: TreeItem) -> void:
 
 
 func _on_open_dir_dialog_dir_selected(dir):
+	top = dir
+	
 	# Remove all items in the explorer.
 	explorer.clear()
+	
+	# Make sure there is a .edoter directory.
+	# If there isn't then it will create one.
+	Utils.ensure_edoter_directory(dir)
 	
 	# Make the explorer visible and grab the focus.
 	explorer.visible = true

@@ -81,3 +81,25 @@ func get_all_dir_paths_in_dir(path: String) -> Array[String]:
 	for dir in dirs:
 		result.append(path + "/" + dir.get_file())
 	return result
+
+
+func get_all_dir_names_in_dir(path: String) -> Array[String]:
+	var result: Array[String] = []
+	var dirs = DirAccess.get_directories_at(path)
+	for dir in dirs:
+		result.append(dir.get_file())
+	return result
+
+
+func has_dir(path: String, dirname: String):
+	var dirnames: Array[String] = get_all_dir_names_in_dir(path)
+	return dirname in dirnames
+
+
+func ensure_edoter_directory(path: String) -> void:
+	if not has_dir(path, ".edoter"):
+		DirAccess.make_dir_absolute(path + "/.edoter")
+	
+	var launch: String = path + "/.edoter/launch.bat"
+	if not FileAccess.file_exists(launch):
+		write_file(launch, "\n")
