@@ -31,12 +31,12 @@ func highlight(extension: String, outfit: Dictionary):
 	
 	# Get all the supported languages.
 	# Language filenames match the extensions.
-	var languages = DirAccess.get_files_at("res://data/languages")
+	var languages = DirAccess.get_files_at("res://languages")
 	
 	for l in languages:
 		# Check if the extension is the same as the language filename.
 		if extension == l.get_basename():
-			var f = FileAccess.open("res://data/languages/" + l, FileAccess.READ)
+			var f = FileAccess.open("res://languages/" + l, FileAccess.READ)
 			syntax_highlighter.set_number_color(number)
 			syntax_highlighter.set_symbol_color(symbol)
 			syntax_highlighter.set_function_color(function)

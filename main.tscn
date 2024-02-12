@@ -154,6 +154,7 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
 hide_root = true
 script = ExtResource("8_eet5u")
 

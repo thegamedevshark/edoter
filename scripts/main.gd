@@ -31,8 +31,6 @@ var outfits: Array = []
 
 # Called when the node enters the scene tree for the firs6t time.
 func _ready():
-	Utils.get_all_dir_paths_in_dir("res://data")
-	
 	if FileAccess.file_exists("user://data.json"):
 		var json = Utils.load_json("user://data.json")
 		data["outfit"] = json["outfit"]
@@ -42,12 +40,12 @@ func _ready():
 	code_edit.grab_focus()
 
 	# Load the outfit stored in the data.
-	outfit = Utils.load_json("res://data/outfits/" + data["outfit"] + ".json")
+	outfit = Utils.load_json("res://outfits/" + data["outfit"] + ".json")
 	
 	# Apply the outfit to all the components.
 	dressup(outfit)
 	
-	var filenames = DirAccess.get_files_at("res://data/outfits")
+	var filenames = DirAccess.get_files_at("res://outfits")
 	var index = 0
 	for filename in filenames:
 		var basename = filename.get_basename() # E.g. 'gruvbox'.
@@ -99,7 +97,7 @@ func _process(delta):
 		if outfit_index >= len(outfits):
 			outfit_index = 0
 		var outfit_name = outfits[outfit_index]
-		var outfit_path = "res://data/outfits/" + outfit_name + ".json"
+		var outfit_path = "res://outfits/" + outfit_name + ".json"
 		var json = Utils.load_json(outfit_path)
 		var extension = Utils.get_file_extension(path)
 		dressup(json, extension)
@@ -178,6 +176,7 @@ func new_file():
 	path = ""
 	filename_label.text = "untitled"
 	code_edit.text = "\n"
+	code_edit.clear_undo_history()
 
 
 func save_file():
@@ -232,39 +231,10 @@ func _on_open_dir_dialog_dir_selected(dir):
 	var first = root.get_child(0)
 	if first != null:
 		explorer.set_selected(first, 0)
-	
-	# Get all the files in the directory and add them to the explorer.
-	#var filenames = DirAccess.get_files_at(dir)
-	#
-	#if len(filenames) > 0:
-		## Add all the files to the explorer.
-		#for filename in filenames:
-			#var path = dir + "\\" + filename.get_file()
-			#
-			## Add an item to the root of the explorer.
-			#var item = explorer.get_root().create_child()
-			#
-			## Set the text of the item to the name of the file.
-			#item.set_text(0, filename.get_file())
-			#
-			## Set the metadata of the item to the file path.
-			#item.set_metadata(0, "file")
-			#item.set_metadata(1, path)
-		#
-		## Focus the first file in the explorer.
-		#var first = root.get_child(0)
-		#explorer.set_selected(first, 0)
-		#
-		#path = dir + "\\" + first.get_text(0)
-		#
-		#var type = first.get_metadata(0)
-		#if type == "file":
-			#code_edit.text = Utils.read_file(path)
-			#filename_label.text = Utils.get_file_name(path)
-	#else:
-		#explorer.visible = false
-		#code_edit.grab_focus()
-		#path = ""
+	else:
+		explorer.visible = false
+		code_edit.grab_focus()
+		path = ""
 
 
 func _on_open_file_dialog_file_selected(path):
@@ -277,6 +247,7 @@ func _on_open_file_dialog_file_selected(path):
 	filename_label.text = Utils.get_file_name(path)
 	var extension = Utils.get_file_extension(path)
 	code_edit.highlight(extension, outfit)
+	code_edit.clear_undo_history()
 
 
 func _on_save_file_dialog_file_selected(path):
@@ -301,6 +272,7 @@ func _on_explorer_item_selected():
 		var extension = Utils.get_file_extension(path)
 		code_edit.highlight(extension, outfit)
 		last_selected_explorer_file_item = item
+		code_edit.clear_undo_history()
 	
 	# If it is a directory.
 	elif DirAccess.dir_exists_absolute(path):

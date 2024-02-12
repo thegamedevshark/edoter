@@ -1,0 +1,10 @@
+{
+	"keywords": [
+		"true",
+		"false",
+	],
+	
+	"regions": [
+		["string", "\"", "\""],
+	]
+}
