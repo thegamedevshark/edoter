@@ -1,0 +1,222 @@
+[gd_scene load_steps=14 format=3 uid="uid://dh4wuwilwlbht"]
+
+[ext_resource type="Theme" uid="uid://mdesken2dikp" path="res://themes/main.tres" id="1_gi8na"]
+[ext_resource type="Script" path="res://scripts/titlebar.gd" id="2_8xlai"]
+[ext_resource type="Script" path="res://scripts/close.gd" id="2_552oc"]
+[ext_resource type="Script" path="res://scripts/labels/dot.gd" id="2_a2pt1"]
+[ext_resource type="Script" path="res://scripts/maximize.gd" id="2_ifb6n"]
+[ext_resource type="Script" path="res://scripts/minimize.gd" id="2_nt771"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="2_sqd0p"]
+[ext_resource type="Theme" uid="uid://uhyujywcesjc" path="res://themes/control_button.tres" id="3_hr1n6"]
+[ext_resource type="Script" path="res://scripts/code_edit.gd" id="7_ddoox"]
+[ext_resource type="Script" path="res://scripts/explorer.gd" id="8_eet5u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjgt0"]
+bg_color = Color(0.156863, 0.192157, 0.219608, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.282353, 0.329412, 0.376471, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_co52s"]
+bg_color = Color(0.117647, 0.152941, 0.180392, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.282353, 0.329412, 0.376471, 1)
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_ocduv"]
+
+[node name="Editor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_gi8na")
+script = ExtResource("2_sqd0p")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Titlebar" type="Panel" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cjgt0")
+script = ExtResource("2_8xlai")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Titlebar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_right = 0
+
+[node name="LeftHBoxContainer" type="HBoxContainer" parent="VBoxContainer/Titlebar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="EdoterLabel" type="Label" parent="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "edoter"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="Dot" type="Label" parent="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.282353, 0.329412, 0.376471, 1)
+theme_override_font_sizes/font_size = 6
+text = "."
+vertical_alignment = 1
+script = ExtResource("2_a2pt1")
+
+[node name="FilenameLabel" type="Label" parent="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.501961, 0.556863, 0.607843, 1)
+text = "untitled"
+
+[node name="RightHBoxContainer" type="HBoxContainer" parent="VBoxContainer/Titlebar/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="MinimizeButton" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme = ExtResource("3_hr1n6")
+text = "1"
+flat = true
+script = ExtResource("2_nt771")
+
+[node name="MaximizeButton" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme = ExtResource("3_hr1n6")
+text = "2"
+flat = true
+script = ExtResource("2_ifb6n")
+
+[node name="CloseButton" type="Button" parent="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme = ExtResource("3_hr1n6")
+text = "3"
+flat = true
+script = ExtResource("2_552oc")
+
+[node name="Body" type="Panel" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_co52s")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Body/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Explorer" type="Tree" parent="VBoxContainer/Body/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+hide_root = true
+script = ExtResource("8_eet5u")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+
+[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer/Body/MarginContainer/HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "
+"
+context_menu_enabled = false
+caret_type = 1
+caret_draw_when_editable_disabled = true
+syntax_highlighter = SubResource("CodeHighlighter_ocduv")
+highlight_all_occurrences = true
+highlight_current_line = true
+line_folding = true
+gutters_draw_line_numbers = true
+gutters_draw_fold_gutter = true
+indent_use_spaces = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
+script = ExtResource("7_ddoox")
+
+[node name="OpenDirDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a Directory"
+position = Vector2i(0, 36)
+size = Vector2i(349, 162)
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[node name="OpenFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a File"
+position = Vector2i(0, 36)
+size = Vector2i(349, 162)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true
+
+[node name="SaveFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+position = Vector2i(0, 36)
+size = Vector2i(349, 162)
+ok_button_text = "Save"
+access = 2
+use_native_dialog = true
+
+[connection signal="gui_input" from="VBoxContainer/Titlebar" to="VBoxContainer/Titlebar" method="_on_gui_input"]
+[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/MinimizeButton" to="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/MinimizeButton" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/MaximizeButton" to="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/MaximizeButton" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Titlebar/MarginContainer/RightHBoxContainer/CloseButton" to="VBoxContainer/Titlebar/MarginContainer/LeftHBoxContainer/MarginContainer/Dot" method="_on_close_pressed"]
+[connection signal="item_activated" from="VBoxContainer/Body/MarginContainer/HBoxContainer/Explorer" to="." method="_on_explorer_item_activated"]
+[connection signal="item_selected" from="VBoxContainer/Body/MarginContainer/HBoxContainer/Explorer" to="." method="_on_explorer_item_selected"]
+[connection signal="focus_entered" from="VBoxContainer/Body/MarginContainer/HBoxContainer/MarginContainer/CodeEdit" to="." method="_on_code_edit_focus_entered"]
+[connection signal="dir_selected" from="OpenDirDialog" to="." method="_on_open_dir_dialog_dir_selected"]
+[connection signal="file_selected" from="OpenFileDialog" to="." method="_on_open_file_dialog_file_selected"]
+[connection signal="file_selected" from="SaveFileDialog" to="." method="_on_save_file_dialog_file_selected"]

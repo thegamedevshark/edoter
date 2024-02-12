@@ -63,7 +63,3 @@ func highlight(extension: String, outfit: Dictionary):
 	syntax_highlighter.set_symbol_color(outfit["a"])
 	syntax_highlighter.set_function_color(outfit["a"])
 	syntax_highlighter.set_member_variable_color(outfit["a"])
-
-
-func dressup(outfit: Dictionary):
-	pass

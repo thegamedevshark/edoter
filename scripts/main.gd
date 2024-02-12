@@ -18,7 +18,9 @@ extends Control
 @onready var titlebar = %Titlebar
 @onready var body = %Body
 
+
 var path = ""
+var last_selected_explorer_file_item: TreeItem = null
 var outfit: Dictionary
 var data = {
 	"outfit": "edoter"
@@ -27,8 +29,10 @@ var outfit_index = 0
 var outfits: Array = []
 
 
-# Called when the node enters the scene tree for the first time.
+# Called when the node enters the scene tree for the firs6t time.
 func _ready():
+	Utils.get_all_dir_paths_in_dir("res://data")
+	
 	if FileAccess.file_exists("user://data.json"):
 		var json = Utils.load_json("user://data.json")
 		data["outfit"] = json["outfit"]
@@ -84,6 +88,7 @@ func _process(delta):
 		
 		if explorer.visible:
 			explorer.grab_focus()
+			explorer.set_selected(last_selected_explorer_file_item,0)
 			var selected = explorer.get_selected()
 		else:
 			code_edit.grab_focus()
@@ -185,6 +190,30 @@ func save_file():
 		Utils.write_file(path, code_edit.text)
 
 
+func fill_explorer(item: TreeItem) -> void:
+	var dir = item.get_metadata(0)
+	var files =  Utils.get_all_file_paths_in_dir(dir)
+	if len(files) == 0:
+		return
+	
+	# Load all directories into the file explorer.
+	var directories = Utils.get_all_dir_paths_in_dir(dir)
+	if len(directories) > 0:
+		for path in directories:
+			var new_item = item.create_child()
+			var filename = Utils.get_file_name(path)
+			new_item.set_text(0, filename)
+			new_item.set_metadata(0, path)
+			fill_explorer(new_item)
+	
+	# Load all the files into the file explorer.
+	for path in files:
+		var new_item = item.create_child()
+		var filename = Utils.get_file_name(path)
+		new_item.set_text(0, filename)
+		new_item.set_metadata(0, path)
+
+
 func _on_open_dir_dialog_dir_selected(dir):
 	# Remove all items in the explorer.
 	explorer.clear()
@@ -195,36 +224,47 @@ func _on_open_dir_dialog_dir_selected(dir):
 	
 	# Set the text of the explorer root to the path.
 	var root = explorer.create_item()
+	root.set_metadata(0, dir)
 	root.set_text(0, dir)
+	fill_explorer(root)
+	
+	# Select the first item in the explorer.
+	var first = root.get_child(0)
+	if first != null:
+		explorer.set_selected(first, 0)
 	
 	# Get all the files in the directory and add them to the explorer.
-	var filenames = DirAccess.get_files_at(dir)
-	
-	if len(filenames) > 0:
-		# Add all the files to the explorer.
-		for filename in filenames:
-			var path = dir + "\\" + filename.get_file()
-			
-			# Add an item to the root of the explorer.
-			var item = explorer.get_root().create_child()
-			
-			# Set the text of the item to the name of the file.
-			item.set_text(0, filename.get_file())
-			
-			# Set the metadata of the item to the file path.
-			item.set_metadata(0, path)
-		
-		# Focus the first file in the explorer.
-		var first = root.get_child(0)
-		explorer.set_selected(first, 0)
-		
-		path = dir + "\\" + first.get_text(0)
-		code_edit.text = Utils.read_file(path)
-		filename_label.text = Utils.get_file_name(path)
-	else:
-		explorer.visible = false
-		code_edit.grab_focus()
-		path = ""
+	#var filenames = DirAccess.get_files_at(dir)
+	#
+	#if len(filenames) > 0:
+		## Add all the files to the explorer.
+		#for filename in filenames:
+			#var path = dir + "\\" + filename.get_file()
+			#
+			## Add an item to the root of the explorer.
+			#var item = explorer.get_root().create_child()
+			#
+			## Set the text of the item to the name of the file.
+			#item.set_text(0, filename.get_file())
+			#
+			## Set the metadata of the item to the file path.
+			#item.set_metadata(0, "file")
+			#item.set_metadata(1, path)
+		#
+		## Focus the first file in the explorer.
+		#var first = root.get_child(0)
+		#explorer.set_selected(first, 0)
+		#
+		#path = dir + "\\" + first.get_text(0)
+		#
+		#var type = first.get_metadata(0)
+		#if type == "file":
+			#code_edit.text = Utils.read_file(path)
+			#filename_label.text = Utils.get_file_name(path)
+	#else:
+		#explorer.visible = false
+		#code_edit.grab_focus()
+		#path = ""
 
 
 func _on_open_file_dialog_file_selected(path):
@@ -250,17 +290,30 @@ func _on_explorer_item_selected():
 	var item = explorer.get_selected()
 	
 	# Get the full path to the selected item.
-	path = item.get_metadata(0)
+	# Only change the global path if it is a file.
+	if FileAccess.file_exists(item.get_metadata(0)):
+		path = item.get_metadata(0)
 
-	code_edit.text = Utils.read_file(path)
-	filename_label.text = Utils.get_file_name(path)
-	var extension = Utils.get_file_extension(path)
-	code_edit.highlight(extension, outfit)
+	# If it is a file.
+	if FileAccess.file_exists(path):
+		code_edit.text = Utils.read_file(path)
+		filename_label.text = Utils.get_file_name(path)
+		var extension = Utils.get_file_extension(path)
+		code_edit.highlight(extension, outfit)
+		last_selected_explorer_file_item = item
+	
+	# If it is a directory.
+	elif DirAccess.dir_exists_absolute(path):
+		pass
 
 
 func _on_explorer_item_activated():
-	explorer.visible = false
-	code_edit.grab_focus()
+	var item = explorer.get_selected()
+	if FileAccess.file_exists(item.get_metadata(0)):
+		explorer.visible = false
+		code_edit.grab_focus()
+	else:
+		item.collapsed = !item.collapsed
 
 
 func _on_code_edit_focus_entered():

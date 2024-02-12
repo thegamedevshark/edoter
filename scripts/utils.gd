@@ -20,10 +20,7 @@ func get_file_extension(path: String) -> String:
 
 
 func get_file_name(path: String) -> String:
-	var f = FileAccess.open(path, FileAccess.READ)
-	var result = f.get_path().get_file()
-	f.close()
-	return result
+	return path.get_file()
 
 
 func read_file(path: String) -> String:
@@ -68,3 +65,19 @@ func window_toggle_maximized() -> void:
 		set_window_maximized()
 	else:
 		set_window_windowed()
+
+
+func get_all_file_paths_in_dir(path: String) -> Array[String]:
+	var result: Array[String] = []
+	var filenames = DirAccess.get_files_at(path)
+	for filename in filenames:
+		result.append(path + "/" + filename.get_file())
+	return result
+
+
+func get_all_dir_paths_in_dir(path: String) -> Array[String]:
+	var result: Array[String] = []
+	var dirs = DirAccess.get_directories_at(path)
+	for dir in dirs:
+		result.append(path + "/" + dir.get_file())
+	return result

@@ -13,6 +13,8 @@ config_version=5
 config/name="edoter"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+boot_splash/bg_color=Color(0.117647, 0.152941, 0.180392, 1)
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
