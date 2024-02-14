@@ -217,7 +217,14 @@ func fill_explorer(item: TreeItem) -> void:
 	for path in files:
 		var new_item = item.create_child()
 		var filename = Utils.get_file_name(path)
-		new_item.set_text(0, filename)
+		var extension = Utils.get_file_extension(path)
+		var icon = ""
+		for file in Utils.get_all_file_paths_in_dir("res://languages"):
+			if file.get_file().get_basename() == extension:
+				var json = Utils.load_json(file)
+				icon = json["icon"]
+		
+		new_item.set_text(0, icon + " \u2009" + filename)
 		new_item.set_metadata(0, path)
 
 
