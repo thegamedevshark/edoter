@@ -19,15 +19,16 @@ extends Control
 @onready var body: Panel = %Body
 
 
-var path: String = ""
-var top: String = ""
+var file_path: String = ""
+var project_path: String = ""
 var last_selected_explorer_file_item: TreeItem = null
-var outfit: Dictionary
+
+var current_outfit: Dictionary
 var data: Dictionary = {
 	"outfit": "edoter"
 }
-var outfit_index: int = 0
-var outfits: Array[String] = []
+var current_outfit_index: int = 0
+var all_outfits: Array[String] = []
 
 
 # Called when the node enters the scene tree for the firs6t time.
@@ -41,18 +42,18 @@ func _ready():
 	code_edit.grab_focus()
 
 	# Load the outfit stored in the data.
-	outfit = Utils.load_json("res://outfits/" + data["outfit"] + ".json")
+	current_outfit = Utils.load_json("res://outfits/" + data["outfit"] + ".json")
 	
 	# Apply the outfit to all the components.
-	dressup(outfit)
+	dressup(current_outfit)
 	
 	var filenames = DirAccess.get_files_at("res://outfits")
 	var index = 0
 	for filename in filenames:
 		var basename = filename.get_basename() # E.g. 'gruvbox'.
-		outfits.append(basename)
+		all_outfits.append(basename)
 		if basename == data["outfit"]:
-			outfit_index = index
+			current_outfit_index = index
 		index += 1
 
 
@@ -94,20 +95,20 @@ func _process(delta):
 	
 	# Handle launching the project.
 	elif Input.is_action_just_pressed("launch"):
-		if FileAccess.file_exists(top + "/.edoter/launch.bat"):
+		if FileAccess.file_exists(project_path + "/.edoter/launch.bat"):
 			var output = []
 			#var result = OS.execute(top + "/.edoter/launch.bat", [], output, true, true)
-			OS.create_process(top + "/.edoter/launch.bat", [], true)
+			OS.create_process(project_path + "/.edoter/launch.bat", [], true)
 	
 	# Handle changing outfit.
 	elif Input.is_action_just_pressed("change_outfit"):
-		outfit_index += 1
-		if outfit_index >= len(outfits):
-			outfit_index = 0
-		var outfit_name = outfits[outfit_index]
+		current_outfit_index += 1
+		if current_outfit_index >= len(all_outfits):
+			current_outfit_index = 0
+		var outfit_name = all_outfits[current_outfit_index]
 		var outfit_path = "res://outfits/" + outfit_name + ".json"
 		var json = Utils.load_json(outfit_path)
-		var extension = Utils.get_file_extension(path)
+		var extension = Utils.get_file_extension(file_path)
 		dressup(json, extension)
 		
 		data["outfit"] = outfit_name
@@ -117,7 +118,7 @@ func _process(delta):
 # Take an outfit and trigger all the neccessary theme changes.
 # The extension is the file extension and is used for setting up the syntax highlighting.
 func dressup(outfit: Dictionary, extension: String = ""):
-	self.outfit = outfit
+	current_outfit = outfit
 	
 	# Change the titlebar theme settings.
 	titlebar.get_theme_stylebox("panel").bg_color = Color.html(outfit["titlebar"])
@@ -181,20 +182,20 @@ func new_file():
 	explorer.visible = false
 	explorer.clear()
 	code_edit.grab_focus()
-	path = ""
+	file_path = ""
 	filename_label.text = "untitled"
 	code_edit.text = "\n"
 	code_edit.clear_undo_history()
 
 
 func save_file():
-	if path == "":
+	if file_path == "":
 		# In this case it is a new file and should be saved as.
 		save_file_dialog.popup_centered()
 	else:
 		# In this case the file being edited already has a path.
 		# We can save overwrite the file at the path to save.
-		Utils.write_file(path, code_edit.text)
+		Utils.write_file(file_path, code_edit.text)
 
 
 func fill_explorer(item: TreeItem) -> void:
@@ -224,12 +225,16 @@ func fill_explorer(item: TreeItem) -> void:
 				var json = Utils.load_json(file)
 				icon = json["icon"]
 		
-		new_item.set_text(0, icon + " \u2009" + filename)
+		if icon != "":
+			new_item.set_text(0, icon + " \u2009" + filename)
+		else:
+			new_item.set_text(0, filename)
+		
 		new_item.set_metadata(0, path)
 
 
 func _on_open_dir_dialog_dir_selected(dir):
-	top = dir
+	project_path = dir
 	
 	# Remove all items in the explorer.
 	explorer.clear()
@@ -255,7 +260,7 @@ func _on_open_dir_dialog_dir_selected(dir):
 	else:
 		explorer.visible = false
 		code_edit.grab_focus()
-		path = ""
+		file_path = ""
 
 
 func _on_open_file_dialog_file_selected(path):
@@ -267,7 +272,7 @@ func _on_open_file_dialog_file_selected(path):
 	code_edit.text = Utils.read_file(path)
 	filename_label.text = Utils.get_file_name(path)
 	var extension = Utils.get_file_extension(path)
-	code_edit.highlight(extension, outfit)
+	code_edit.highlight(extension, current_outfit)
 	code_edit.clear_undo_history()
 
 
@@ -284,19 +289,19 @@ func _on_explorer_item_selected():
 	# Get the full path to the selected item.
 	# Only change the global path if it is a file.
 	if FileAccess.file_exists(item.get_metadata(0)):
-		path = item.get_metadata(0)
+		file_path = item.get_metadata(0)
 
 	# If it is a file.
-	if FileAccess.file_exists(path):
-		code_edit.text = Utils.read_file(path)
-		filename_label.text = Utils.get_file_name(path)
-		var extension = Utils.get_file_extension(path)
-		code_edit.highlight(extension, outfit)
+	if FileAccess.file_exists(file_path):
+		code_edit.text = Utils.read_file(file_path)
+		filename_label.text = Utils.get_file_name(file_path)
+		var extension = Utils.get_file_extension(file_path)
+		code_edit.highlight(extension, current_outfit)
 		last_selected_explorer_file_item = item
 		code_edit.clear_undo_history()
 	
 	# If it is a directory.
-	elif DirAccess.dir_exists_absolute(path):
+	elif DirAccess.dir_exists_absolute(file_path):
 		pass
 
 
