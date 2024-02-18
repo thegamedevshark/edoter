@@ -1,0 +1,52 @@
+{
+	"icon": "\ue620",
+	
+	"keywords": [
+		"if",
+		"elif",
+		"else",
+		"for",
+		"while",
+		"match",
+		"break",
+		"continue",
+		"pass",
+		"return",
+		"class",
+		"class_name",
+		"extends",
+		"is",
+		"in",
+		"as",
+		"self",
+		"signal",
+		"func",
+		"static",
+		"const",
+		"enum",
+		"var",
+		"breakpoint",
+		"preload",
+		"await",
+		"yield",
+		"assert",
+		"void",
+		"PI",
+		"TAU",
+		"INF",
+		"NAN",
+
+		"null",
+		"false",
+		"true"
+	],
+	
+	"regions": [
+		["string", "\"", "\""],
+		["string", "'", "'"],
+		["string", "$", " "],
+		["string", "%", " "],
+		["keyword", "@", " "],
+		["comment", "--", ""]
+	]
+}

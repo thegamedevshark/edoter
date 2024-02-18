@@ -111,6 +111,17 @@ func _process(_delta):
 		
 		data["outfit"] = outfit_name
 		Utils.write_file("user://data.json", JSON.stringify(data, "\t"))
+	
+	# Handle deleting file.
+	elif Input.is_action_just_pressed("delete"):
+		if explorer.has_focus():
+			var item = explorer.get_selected()
+
+			# Get the path to the item.
+			var path = item.get_metadata(0)
+			OS.move_to_trash(path)
+
+			item.free()
 
 
 # Take an outfit and trigger all the neccessary theme changes.

@@ -48,7 +48,17 @@ func highlight(extension: String, outfit: Dictionary):
 			for region in lang["regions"]:
 				var col: Color = Color()
 				var line_only = false
-				if region[0] == "string":
+				if region[0] == "number":
+					col = number
+				elif region[0] == "symbol":
+					col = symbol
+				elif region[0] == "function":
+					col = function
+				elif region[0] == "member":
+					col = member
+				elif region[0] == "keyword":
+					col = keyword
+				elif region[0] == "string":
 					col = string
 				elif region[0] == "comment":
 					col = comment
