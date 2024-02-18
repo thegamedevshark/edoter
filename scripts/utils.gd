@@ -36,13 +36,13 @@ func write_file(path: String, content: String) -> void:
 	f.close()
 
 
-func set_window_maximized() -> void:
-	DisplayServer.window_set_mode(3) # Set the window to maximized.
+func set_window_fullscreen() -> void:
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 
 func set_window_windowed() -> void:
 	# Set the window to windowed.
-	DisplayServer.window_set_mode(0)
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	DisplayServer.window_set_size(Vector2i(800, 600))
 	
 	# Move the window to the center of the screenn
@@ -52,17 +52,17 @@ func set_window_windowed() -> void:
 	DisplayServer.window_set_position(Vector2i(x, y))
 
 
-func is_window_maximized() -> bool:
-	return DisplayServer.window_get_mode() == 3
+func is_window_fullscreen() -> bool:
+	return DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 
 
 func is_window_windowed() -> bool:
-	return DisplayServer.window_get_mode() == 0
+	return DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_WINDOWED
 
 
-func window_toggle_maximized() -> void:
+func window_toggle_fullscreen() -> void:
 	if is_window_windowed():
-		set_window_maximized()
+		set_window_fullscreen()
 	else:
 		set_window_windowed()
 

@@ -58,7 +58,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	# Handle exiting the program.
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
@@ -96,8 +96,6 @@ func _process(delta):
 	# Handle launching the project.
 	elif Input.is_action_just_pressed("launch"):
 		if FileAccess.file_exists(project_path + "/.edoter/launch.bat"):
-			var output = []
-			#var result = OS.execute(top + "/.edoter/launch.bat", [], output, true, true)
 			OS.create_process(project_path + "/.edoter/launch.bat", [], true)
 	
 	# Handle changing outfit.
