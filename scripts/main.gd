@@ -219,8 +219,9 @@ func fill_explorer(item: TreeItem) -> void:
 		for path in directories:
 			var new_item = item.create_child()
 			var filename = Utils.get_file_name(path)
-			new_item.set_text(0, "\uf4d4 \u2009" + filename) # Open folder icon
+			new_item.set_text(0, "\uf4d3 \u2009" + filename) # Closed folder icon.
 			new_item.set_metadata(0, path)
+			new_item.collapsed = true
 			fill_explorer(new_item)
 	
 	# Load all the files into the file explorer.
@@ -303,6 +304,7 @@ func _on_explorer_item_selected():
 	# If it is a file.
 	if FileAccess.file_exists(file_path):
 		code_edit.text = Utils.read_file(file_path)
+		code_edit.text = code_edit.text.replace("\t", "    ")
 		filename_label.text = Utils.get_file_name(file_path)
 		var extension = Utils.get_file_extension(file_path)
 		code_edit.highlight(extension, current_outfit)

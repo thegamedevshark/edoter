@@ -43,12 +43,12 @@ func set_window_fullscreen() -> void:
 func set_window_windowed() -> void:
 	# Set the window to windowed.
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	DisplayServer.window_set_size(Vector2i(800, 600))
+	DisplayServer.window_set_size(Vector2i(1000, 750))
 	
 	# Move the window to the center of the screenn
 	var screen_size = DisplayServer.screen_get_size()
-	var x = -400 + screen_size.x / 2
-	var y = -300 + screen_size.y / 2
+	var x = -500 + screen_size.x / 2
+	var y = -375 + screen_size.y / 2
 	DisplayServer.window_set_position(Vector2i(x, y))
 
 

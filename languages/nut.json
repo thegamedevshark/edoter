@@ -1,0 +1,34 @@
+{
+    "icon": "\udb81\udef8",
+    
+    "keywords": [
+        "include",
+        "namespace",
+        "class",
+        "extends",
+        "function",
+        "override",
+        "constructor",
+        
+        "if",
+        "elif",
+        "else",
+        
+        "self",
+        "base",
+        
+        "floating",
+        "boolean",
+        "integer",
+        "string",
+        "nothing",
+        
+        "true",
+        "false"
+    ],
+    
+    "regions": [
+        ["string", "\"", "\""],
+        ["keyword", "::", " "]
+    ]
+}

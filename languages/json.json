@@ -1,14 +1,14 @@
 {
-	"icon": "",
-	"keywords": [
-		"true",
-		"false"
-	],
-	"regions": [
-		[
-			"string",
-			"\"",
-			"\""
-		]
-	]
+    "icon": "",
+    "keywords": [
+        "true",
+        "false"
+    ],
+    "regions": [
+        [
+            "string",
+            "\"",
+            "\""
+        ]
+    ]
 }
